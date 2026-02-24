@@ -1,11 +1,16 @@
+import { useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import theme from './Styles/global';
+import { ThemeModeProvider, useThemeMode } from './Context/ThemeContext';
+import getTheme from './Styles/global';
 import LandingPage from './Page/LandingPage';
 import ResumePage from './Page/ResumePage';
 
-function App() {
+function ThemedApp() {
+  const { mode } = useThemeMode();
+  const theme = useMemo(() => getTheme(mode), [mode]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -18,6 +23,14 @@ function App() {
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
+  );
+}
+
+function App() {
+  return (
+    <ThemeModeProvider>
+      <ThemedApp />
+    </ThemeModeProvider>
   );
 }
 

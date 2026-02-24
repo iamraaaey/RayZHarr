@@ -6,7 +6,9 @@ import {
     Chip,
     Divider,
     Button,
+    IconButton,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import {
     Email as EmailIcon,
     Phone as PhoneIcon,
@@ -16,18 +18,24 @@ import {
     Download as DownloadIcon,
     ArrowBack as ArrowBackIcon,
     Print as PrintIcon,
+    LightMode as LightModeIcon,
+    DarkMode as DarkModeIcon,
 } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import Experience from '../Components/Experience';
 import SkillsSection from '../Components/SkillsSection';
 import MainLayout from '../Layout/MainLayout';
 import { persons } from '../data/persons';
+import { useThemeMode } from '../Context/ThemeContext';
 
 const NAV_LINKS = ['Experience', 'Education', 'Skills', 'Contact'];
 
 function ResumePage() {
     const navigate = useNavigate();
     const { personId } = useParams();
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
+    const { toggleMode } = useThemeMode();
 
     // Resolve person from URL param, fall back to raynold
     const person = persons[personId] || persons.raynold;
@@ -49,8 +57,8 @@ function ResumePage() {
                     top: 0,
                     zIndex: 100,
                     backdropFilter: 'blur(20px)',
-                    backgroundColor: 'rgba(10,10,15,0.88)',
-                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    backgroundColor: isDark ? 'rgba(10,10,15,0.88)' : 'rgba(255,255,255,0.88)',
+                    borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.08)',
                     px: { xs: 2, md: 6 },
                     py: 1.5,
                     display: 'flex',
@@ -65,7 +73,7 @@ function ResumePage() {
                     onClick={() => navigate('/')}
                     size="small"
                     sx={{
-                        color: '#94a3b8',
+                        color: 'text.secondary',
                         textTransform: 'none',
                         '&:hover': { color: accentColor },
                     }}
@@ -80,7 +88,7 @@ function ResumePage() {
                             size="small"
                             onClick={() => scrollTo(link)}
                             sx={{
-                                color: '#94a3b8',
+                                color: 'text.secondary',
                                 textTransform: 'none',
                                 fontSize: '0.85rem',
                                 borderRadius: 2,
@@ -92,15 +100,18 @@ function ResumePage() {
                     ))}
                 </Stack>
 
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <IconButton onClick={toggleMode} size="small" sx={{ color: 'text.secondary' }}>
+                        {isDark ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
+                    </IconButton>
                     <Button
                         variant="outlined"
                         startIcon={<PrintIcon />}
                         size="small"
                         onClick={() => window.print()}
                         sx={{
-                            borderColor: 'rgba(255,255,255,0.2)',
-                            color: '#94a3b8',
+                            borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
+                            color: 'text.secondary',
                             textTransform: 'none',
                             borderRadius: 2,
                             fontSize: '0.82rem',
@@ -182,7 +193,7 @@ function ResumePage() {
                         sx={{
                             width: { xs: 120, md: 150 },
                             height: { xs: 120, md: 150 },
-                            border: '3px solid rgba(255,255,255,0.15)',
+                            border: isDark ? '3px solid rgba(255,255,255,0.15)' : '3px solid rgba(0,0,0,0.1)',
                             position: 'relative',
                             zIndex: 1,
                             fontSize: '3rem',
@@ -198,7 +209,9 @@ function ResumePage() {
                     variant="h3"
                     sx={{
                         fontWeight: 800,
-                        background: `linear-gradient(135deg, #f1f5f9, ${accentColor}, ${secondaryColor})`,
+                        background: isDark
+                            ? `linear-gradient(135deg, #f1f5f9, ${accentColor}, ${secondaryColor})`
+                            : `linear-gradient(135deg, #1e293b, ${accentColor}, ${secondaryColor})`,
                         backgroundClip: 'text',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
@@ -213,7 +226,7 @@ function ResumePage() {
                 <Typography
                     sx={{
                         fontSize: { xs: '0.95rem', md: '1.15rem' },
-                        color: '#94a3b8',
+                        color: 'text.secondary',
                         fontWeight: 400,
                         mb: 1,
                     }}
@@ -231,8 +244,8 @@ function ResumePage() {
                     spacing={0.5}
                     sx={{ mb: 3 }}
                 >
-                    <LocationIcon sx={{ fontSize: '1rem', color: '#64748b' }} />
-                    <Typography sx={{ color: '#64748b', fontSize: '0.9rem' }}>
+                    <LocationIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />
+                    <Typography sx={{ color: 'text.disabled', fontSize: '0.9rem' }}>
                         {person.location}
                     </Typography>
                 </Stack>
@@ -242,7 +255,7 @@ function ResumePage() {
                     sx={{
                         maxWidth: 640,
                         mx: 'auto',
-                        color: '#94a3b8',
+                        color: 'text.secondary',
                         fontSize: '0.95rem',
                         lineHeight: 1.8,
                         mb: 3,
@@ -269,14 +282,14 @@ function ResumePage() {
                             clickable
                             size="small"
                             sx={{
-                                bgcolor: 'rgba(255,255,255,0.05)',
-                                color: '#cbd5e1',
-                                border: '1px solid rgba(255,255,255,0.1)',
+                                bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                                color: 'text.primary',
+                                border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
                                 '& .MuiChip-icon': { color: accentColor },
                                 '&:hover': {
                                     bgcolor: `${accentColor}18`,
                                     borderColor: `${accentColor}44`,
-                                    color: '#f1f5f9',
+                                    color: 'text.primary',
                                 },
                                 px: 0.5,
                                 fontSize: '0.8rem',
@@ -287,7 +300,7 @@ function ResumePage() {
             </Box>
 
             {/* ── Divider ── */}
-            <Divider sx={{ mx: { xs: 2, md: 8 }, borderColor: 'rgba(255,255,255,0.06)', mb: 6 }} />
+            <Divider sx={{ mx: { xs: 2, md: 8 }, borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)', mb: 6 }} />
 
             {/* ── Main Content ── */}
             <Box
@@ -318,10 +331,10 @@ function ResumePage() {
                         textAlign: 'center',
                     }}
                 >
-                    <Typography variant="h5" sx={{ fontWeight: 700, color: '#f1f5f9', mb: 1.5 }}>
+                    <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', mb: 1.5 }}>
                         Let's Work Together
                     </Typography>
-                    <Typography sx={{ color: '#94a3b8', mb: 3, fontSize: '0.95rem', lineHeight: 1.8 }}>
+                    <Typography sx={{ color: 'text.secondary', mb: 3, fontSize: '0.95rem', lineHeight: 1.8 }}>
                         I'm always open to exciting opportunities, internships, and collaborations.
                         Feel free to reach out!
                     </Typography>
@@ -372,8 +385,8 @@ function ResumePage() {
                 sx={{
                     textAlign: 'center',
                     py: 3,
-                    borderTop: '1px solid rgba(255,255,255,0.06)',
-                    color: '#475569',
+                    borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.08)',
+                    color: 'text.secondary',
                     fontSize: '0.8rem',
                 }}
             >

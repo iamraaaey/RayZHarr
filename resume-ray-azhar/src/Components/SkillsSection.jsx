@@ -5,6 +5,7 @@ import {
     Chip,
     LinearProgress,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import {
     Code as CodeIcon,
     Terminal as TerminalIcon,
@@ -26,10 +27,13 @@ const categoryIcons = {
 };
 
 function SkillBar({ name, level, color }) {
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
+
     return (
         <Box sx={{ mb: 1.8 }}>
             <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
-                <Typography sx={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 500 }}>
+                <Typography sx={{ fontSize: '0.85rem', color: 'text.primary', fontWeight: 500 }}>
                     {name}
                 </Typography>
                 <Typography sx={{ fontSize: '0.78rem', color: color, fontWeight: 600 }}>
@@ -42,7 +46,7 @@ function SkillBar({ name, level, color }) {
                 sx={{
                     height: 6,
                     borderRadius: 3,
-                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
                     '& .MuiLinearProgress-bar': {
                         borderRadius: 3,
                         background: `linear-gradient(90deg, ${color}99, ${color})`,
@@ -59,6 +63,8 @@ function SkillsSection({ person }) {
         softSkills,
         accentColor = '#6366f1',
     } = person;
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
 
     return (
         <Box id="skills">
@@ -83,7 +89,7 @@ function SkillsSection({ person }) {
                         sx={{
                             p: { xs: 2, sm: 3 },
                             borderRadius: 3,
-                            background: 'rgba(255,255,255,0.03)',
+                            background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
                             border: `1px solid ${cat.color}22`,
                             transition: 'border-color 0.3s, transform 0.2s',
                             '&:hover': {
@@ -112,11 +118,11 @@ function SkillsSection({ person }) {
                 sx={{
                     p: { xs: 2, sm: 3 },
                     borderRadius: 3,
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
                 }}
             >
-                <Typography sx={{ fontWeight: 600, color: '#94a3b8', mb: 2, fontSize: '0.9rem' }}>
+                <Typography sx={{ fontWeight: 600, color: 'text.secondary', mb: 2, fontSize: '0.9rem' }}>
                     Soft Skills
                 </Typography>
                 <Stack direction="row" flexWrap="wrap" gap={1}>
@@ -127,7 +133,7 @@ function SkillsSection({ person }) {
                             size="small"
                             sx={{
                                 background: `${accentColor}20`,
-                                color: '#a5b4fc',
+                                color: isDark ? '#a5b4fc' : accentColor,
                                 border: `1px solid ${accentColor}35`,
                                 fontSize: '0.78rem',
                                 '&:hover': {
