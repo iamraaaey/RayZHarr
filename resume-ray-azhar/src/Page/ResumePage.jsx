@@ -15,6 +15,7 @@ import {
     LocationOn as LocationIcon,
     Download as DownloadIcon,
     ArrowBack as ArrowBackIcon,
+    Print as PrintIcon,
 } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import Experience from '../Components/Experience';
@@ -42,6 +43,7 @@ function ResumePage() {
             {/* ── Top Nav ── */}
             <Box
                 component="nav"
+                className="no-print"
                 sx={{
                     position: 'sticky',
                     top: 0,
@@ -90,26 +92,48 @@ function ResumePage() {
                     ))}
                 </Stack>
 
-                <Button
-                    variant="outlined"
-                    startIcon={<DownloadIcon />}
-                    size="small"
-                    href={person.cvFile}
-                    download
-                    sx={{
-                        borderColor: `${accentColor}55`,
-                        color: accentColor,
-                        textTransform: 'none',
-                        borderRadius: 2,
-                        fontSize: '0.82rem',
-                        '&:hover': {
-                            borderColor: accentColor,
-                            bgcolor: `${accentColor}12`,
-                        },
-                    }}
-                >
-                    Resume PDF
-                </Button>
+                <Stack direction="row" spacing={1}>
+                    <Button
+                        variant="outlined"
+                        startIcon={<PrintIcon />}
+                        size="small"
+                        onClick={() => window.print()}
+                        sx={{
+                            borderColor: 'rgba(255,255,255,0.2)',
+                            color: '#94a3b8',
+                            textTransform: 'none',
+                            borderRadius: 2,
+                            fontSize: '0.82rem',
+                            '&:hover': {
+                                borderColor: accentColor,
+                                color: accentColor,
+                                bgcolor: `${accentColor}12`,
+                            },
+                        }}
+                    >
+                        Print
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        startIcon={<DownloadIcon />}
+                        size="small"
+                        href={person.cvFile}
+                        download
+                        sx={{
+                            borderColor: `${accentColor}55`,
+                            color: accentColor,
+                            textTransform: 'none',
+                            borderRadius: 2,
+                            fontSize: '0.82rem',
+                            '&:hover': {
+                                borderColor: accentColor,
+                                bgcolor: `${accentColor}12`,
+                            },
+                        }}
+                    >
+                        Resume PDF
+                    </Button>
+                </Stack>
             </Box>
 
             {/* ── Hero / Profile ── */}
@@ -344,6 +368,7 @@ function ResumePage() {
             {/* ── Footer ── */}
             <Box
                 component="footer"
+                className="no-print"
                 sx={{
                     textAlign: 'center',
                     py: 3,

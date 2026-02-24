@@ -380,7 +380,7 @@ function LandingPage() {
                     fontSize: '0.78rem',
                 }}
             >
-                © 2026 Raynold anak Kabai & Azhar Sulaiman — Intern Uglobal @ UNIMAS
+                © 2026 Raynold anak Kabai & Azhar Sulaiman | Intern Uglobal @ UNIMAS
             </Box>
         </MainLayout>
     );

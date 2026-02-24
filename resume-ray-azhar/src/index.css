@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap');
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -13,13 +15,15 @@
   --accent: #f59e0b;
   --bg-dark: #0a0a0f;
   --bg-card: #111118;
-  --bg-glass: rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.08);
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.08);
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
@@ -39,30 +43,158 @@ body {
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.5); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.8); }
+::-webkit-scrollbar {
+  width: 6px;
+}
 
-a { color: inherit; text-decoration: none; }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.8);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; transform: scaleX(0.8); }
-  50%       { opacity: 1;   transform: scaleX(1); }
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleX(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* ─── Print Styles ─────────────────────────────── */
+@media print {
+
+  /* Force white background, dark text */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html,
+  body,
+  #root {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 11pt;
+  }
+
+  /* Hide non-printable UI */
+  nav,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Remove dark backgrounds from cards/boxes */
+  [class*="MuiBox"],
+  [class*="MuiPaper"] {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: #e2e8f0 !important;
+  }
+
+  /* Recolor text */
+  [class*="MuiTypography"] {
+    color: #1e293b !important;
+    -webkit-text-fill-color: #1e293b !important;
+  }
+
+  /* Recolor chips */
+  [class*="MuiChip"] {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+  }
+
+  /* Recolor progress bars */
+  [class*="MuiLinearProgress"] {
+    background: #e2e8f0 !important;
+  }
+
+  [class*="MuiLinearProgress-bar"] {
+    background: #6366f1 !important;
+  }
+
+  /* Ensure avatars print */
+  [class*="MuiAvatar"] img {
+    display: block !important;
+  }
+
+  /* Page breaks */
+  #experience,
+  #education,
+  #skills,
+  #contact {
+    page-break-inside: avoid;
+  }
+
+  /* Remove sticky nav spacing */
+  body>* {
+    margin-top: 0 !important;
+  }
+
+  /* Links – show URL in parens */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #64748b !important;
+  }
 }
