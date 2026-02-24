@@ -10,7 +10,7 @@ import {
     LinkedIn as LinkedInIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import MainLayout from '../Layout/MainLayout';
 import { personList } from '../data/persons';
 
@@ -22,64 +22,66 @@ function useSound() {
         if (!ctxRef.current) {
             ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
         }
-
         if (ctxRef.current.state === 'suspended') ctxRef.current.resume();
         return ctxRef.current;
     }, []);
 
-  
     const playClick = useCallback((accentColor = '#6366f1') => {
         const ctx = getCtx();
         const now = ctx.currentTime;
-
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         const filter = ctx.createBiquadFilter();
-
         osc.type = 'sine';
         osc.frequency.setValueAtTime(520, now);
         osc.frequency.exponentialRampToValueAtTime(260, now + 0.12);
-
         filter.type = 'lowpass';
         filter.frequency.value = 3000;
-
         gain.gain.setValueAtTime(0.35, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-
         osc.connect(filter);
         filter.connect(gain);
         gain.connect(ctx.destination);
-
         osc.start(now);
         osc.stop(now + 0.2);
     }, [getCtx]);
 
-    /** Soft "tick" for hover */
-    const playHover = useCallback(() => {
+    const playLike = useCallback(() => {
         const ctx = getCtx();
         const now = ctx.currentTime;
-
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(900, now);
-        osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
-
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
         osc.connect(gain);
         gain.connect(ctx.destination);
-
         osc.start(now);
-        osc.stop(now + 0.08);
+        osc.stop(now + 0.3);
     }, [getCtx]);
 
-    return { playClick, playHover };
+    const playPass = useCallback(() => {
+        const ctx = getCtx();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+    }, [getCtx]);
+
+    return { playClick, playLike, playPass };
 }
 
-// fallback icon resolver
+// ─── Icon helper ──────────────────────────────────────────────────────────────
 function HighlightIcon({ label }) {
     const icons = {
         'Web Development': <CodeIcon fontSize="inherit" />,
@@ -90,16 +92,65 @@ function HighlightIcon({ label }) {
         'Cloud & DevOps': <DataIcon fontSize="inherit" />,
         'Data Engineering': <DataIcon fontSize="inherit" />,
         'API Design': <CodeIcon fontSize="inherit" />,
+        'ML Developer': <StarIcon fontSize="inherit" />,
+        'System Design': <CodeIcon fontSize="inherit" />,
     };
     return icons[label] || <StarIcon fontSize="inherit" />;
 }
 
+// ─── Swipeable Person Card ────────────────────────────────────────────────────
 function PersonCard({ person }) {
     const navigate = useNavigate();
-    const { playClick } = useSound();
+    const { playClick, playLike, playPass } = useSound();
+
+    const cardRef = useRef(null);
+    const startRef = useRef(null);
+
+    const [pos, setPos] = useState({ x: 0, y: 0 });
+    const [dragging, setDragging] = useState(false);
+    const [exiting, setExiting] = useState(null); // 'like' | 'pass' | null
+    const [gone, setGone] = useState(false);
+
+    // derived values
+    const rotation = pos.x / 20;
+    const likeOpacity = Math.min(Math.max(pos.x / 80, 0), 1);
+    const passOpacity = Math.min(Math.max(-pos.x / 80, 0), 1);
+
+    const flyOut = (dir) => {
+        setExiting(dir);
+        if (dir === 'like') playLike(); else playPass();
+        setTimeout(() => setGone(true), 420);
+    };
+
+    const handlePointerDown = (e) => {
+        if (exiting || gone) return;
+        setDragging(true);
+        startRef.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+        cardRef.current?.setPointerCapture(e.pointerId);
+    };
+
+    const handlePointerMove = (e) => {
+        if (!dragging) return;
+        setPos({ x: e.clientX - startRef.current.x, y: e.clientY - startRef.current.y });
+    };
+
+    const handlePointerUp = () => {
+        if (!dragging) return;
+        setDragging(false);
+        if (pos.x > 110) flyOut('like');
+        else if (pos.x < -110) flyOut('pass');
+        else setPos({ x: 0, y: 0 });
+    };
+
+    if (gone) return null;
 
     return (
         <Box
+            ref={cardRef}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
             sx={{
                 position: 'relative',
                 flex: '1 1 340px',
@@ -114,14 +165,32 @@ function PersonCard({ person }) {
                 alignItems: 'center',
                 textAlign: 'center',
                 gap: 2,
-                transition: 'transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
-                cursor: 'default',
-                '&:hover': {
-                    transform: 'translateY(-8px)',
-                    borderColor: `${person.accentColor}70`,
-                    boxShadow: `0 24px 60px ${person.accentColor}20`,
-                },
-                // Top accent line
+                userSelect: 'none',
+                touchAction: 'none',
+                cursor: exiting ? 'default' : dragging ? 'grabbing' : 'grab',
+                // swipe transform (or fly-out)
+                transform: exiting === 'like'
+                    ? 'translateX(160vw) rotate(30deg)'
+                    : exiting === 'pass'
+                        ? 'translateX(-160vw) rotate(-30deg)'
+                        : `translateX(${pos.x}px) translateY(${pos.y}px) rotate(${rotation}deg)`,
+                transition: dragging
+                    ? 'none'
+                    : exiting
+                        ? 'transform 0.42s cubic-bezier(0.4,0,1,1)'
+                        : 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s',
+                // glow driven by drag direction
+                boxShadow: likeOpacity > 0.05
+                    ? `0 24px 60px #10b98140`
+                    : passOpacity > 0.05
+                        ? `0 24px 60px #ef444440`
+                        : `0 24px 60px ${person.accentColor}20`,
+                borderColor: likeOpacity > 0.05
+                    ? '#10b98160'
+                    : passOpacity > 0.05
+                        ? '#ef444460'
+                        : `${person.accentColor}30`,
+                // top accent line
                 '&::before': {
                     content: '""',
                     position: 'absolute',
@@ -135,7 +204,61 @@ function PersonCard({ person }) {
                 },
             }}
         >
-            {/* Avatar with glow ring */}
+            {/* ── LIKE stamp ── */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 22,
+                    left: 22,
+                    opacity: likeOpacity,
+                    transform: 'rotate(-18deg)',
+                    pointerEvents: 'none',
+                    zIndex: 5,
+                    transition: dragging ? 'none' : 'opacity 0.15s',
+                }}
+            >
+                <Chip
+                    label="LIKE 💚"
+                    sx={{
+                        bgcolor: 'rgba(16,185,129,0.15)',
+                        color: '#10b981',
+                        border: '2.5px solid #10b981',
+                        fontWeight: 900,
+                        fontSize: '1rem',
+                        letterSpacing: 1,
+                        px: 1,
+                    }}
+                />
+            </Box>
+
+            {/* ── PASS stamp ── */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 22,
+                    right: 22,
+                    opacity: passOpacity,
+                    transform: 'rotate(18deg)',
+                    pointerEvents: 'none',
+                    zIndex: 5,
+                    transition: dragging ? 'none' : 'opacity 0.15s',
+                }}
+            >
+                <Chip
+                    label="PASS ❌"
+                    sx={{
+                        bgcolor: 'rgba(239,68,68,0.15)',
+                        color: '#ef4444',
+                        border: '2.5px solid #ef4444',
+                        fontWeight: 900,
+                        fontSize: '1rem',
+                        letterSpacing: 1,
+                        px: 1,
+                    }}
+                />
+            </Box>
+
+            {/* ── Avatar with glow ring ── */}
             <Box sx={{ position: 'relative', display: 'inline-block', mt: 1 }}>
                 <Box
                     sx={{
@@ -164,7 +287,7 @@ function PersonCard({ person }) {
                 </Avatar>
             </Box>
 
-            {/* Name & role */}
+            {/* ── Name & role ── */}
             <Box>
                 <Typography
                     variant="h5"
@@ -184,30 +307,19 @@ function PersonCard({ person }) {
                 <Typography sx={{ color: '#94a3b8', fontSize: '0.88rem', mb: 0.5 }}>
                     {person.role}
                 </Typography>
-                <Typography
-                    sx={{
-                        fontSize: '0.82rem',
-                        color: person.accentColor,
-                        fontWeight: 600,
-                    }}
-                >
+                <Typography sx={{ fontSize: '0.82rem', color: person.accentColor, fontWeight: 600 }}>
                     {person.title}
                 </Typography>
             </Box>
 
-            {/* Bio */}
+            {/* ── Bio ── */}
             <Typography
-                sx={{
-                    color: '#64748b',
-                    fontSize: { xs: '0.82rem', sm: '0.85rem' },
-                    lineHeight: 1.7,
-                    maxWidth: 360,
-                }}
+                sx={{ color: '#64748b', fontSize: { xs: '0.82rem', sm: '0.85rem' }, lineHeight: 1.7, maxWidth: 360 }}
             >
                 {person.bio.slice(0, 140)}…
             </Typography>
 
-            {/* Highlight chips */}
+            {/* ── Highlight chips ── */}
             <Stack direction="row" flexWrap="wrap" justifyContent="center" gap={1}>
                 {person.highlights.map((h) => (
                     <Chip
@@ -219,110 +331,83 @@ function PersonCard({ person }) {
                         }
                         label={h.label}
                         size="small"
-                        sx={{
-                            bgcolor: `${h.color}14`,
-                            color: '#cbd5e1',
-                            border: `1px solid ${h.color}30`,
-                            fontSize: '0.76rem',
-                        }}
+                        sx={{ bgcolor: `${h.color}14`, color: '#cbd5e1', border: `1px solid ${h.color}30`, fontSize: '0.76rem' }}
                     />
                 ))}
             </Stack>
 
-            {/* Stats row */}
-            <Stack
-                direction="row"
-                justifyContent="center"
-                flexWrap="wrap"
-                gap={1.5}
-                sx={{ width: '100%' }}
-            >
+            {/* ── Stats row ── */}
+            <Stack direction="row" justifyContent="center" flexWrap="wrap" gap={1.5} sx={{ width: '100%' }}>
                 {person.stats.map((s) => (
                     <Box
                         key={s.label}
-                        sx={{
-                            textAlign: 'center',
-                            px: 1.5,
-                            py: 1,
-                            borderRadius: 2,
-                            bgcolor: 'rgba(255,255,255,0.03)',
-                            border: '1px solid rgba(255,255,255,0.06)',
-                            minWidth: 60,
-                        }}
+                        sx={{ textAlign: 'center', px: 1.5, py: 1, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', minWidth: 60 }}
                     >
                         <Typography
                             sx={{
-                                fontSize: '1.15rem',
-                                fontWeight: 800,
+                                fontSize: '1.15rem', fontWeight: 800,
                                 background: `linear-gradient(135deg, ${person.accentColor}, ${person.secondaryColor})`,
-                                backgroundClip: 'text',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
+                                backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                                 lineHeight: 1.1,
                             }}
                         >
                             {s.value}
                         </Typography>
-                        <Typography sx={{ color: '#475569', fontSize: '0.68rem', mt: 0.2 }}>
-                            {s.label}
-                        </Typography>
+                        <Typography sx={{ color: '#475569', fontSize: '0.68rem', mt: 0.2 }}>{s.label}</Typography>
                     </Box>
                 ))}
             </Stack>
 
-            {/* Quick contact */}
+            {/* ── Quick contact ── */}
             <Stack direction="row" spacing={1}>
-                <Box
-                    component="a"
-                    href={`mailto:${person.email}`}
-                    sx={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: 34, height: 34, borderRadius: 2,
-                        color: '#94a3b8', bgcolor: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        transition: 'all 0.2s',
-                        '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
-                    }}
-                >
-                    <EmailIcon sx={{ fontSize: '1rem' }} />
-                </Box>
-                <Box
-                    component="a"
-                    href={person.github}
-                    target="_blank"
-                    sx={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: 34, height: 34, borderRadius: 2,
-                        color: '#94a3b8', bgcolor: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        transition: 'all 0.2s',
-                        '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
-                    }}
-                >
-                    <GitHubIcon sx={{ fontSize: '1rem' }} />
-                </Box>
-                <Box
-                    component="a"
-                    href={person.linkedin}
-                    target="_blank"
-                    sx={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: 34, height: 34, borderRadius: 2,
-                        color: '#94a3b8', bgcolor: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        transition: 'all 0.2s',
-                        '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
-                    }}
-                >
-                    <LinkedInIcon sx={{ fontSize: '1rem' }} />
-                </Box>
+                {[
+                    { href: `mailto:${person.email}`, icon: <EmailIcon sx={{ fontSize: '1rem' }} /> },
+                    { href: person.github, icon: <GitHubIcon sx={{ fontSize: '1rem' }} />, target: '_blank' },
+                    { href: person.linkedin, icon: <LinkedInIcon sx={{ fontSize: '1rem' }} />, target: '_blank' },
+                ].map((item, i) => (
+                    <Box
+                        key={i}
+                        component="a"
+                        href={item.href}
+                        target={item.target}
+                        onClick={(e) => e.stopPropagation()}
+                        sx={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: 34, height: 34, borderRadius: 2,
+                            color: '#94a3b8', bgcolor: 'rgba(255,255,255,0.04)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            transition: 'all 0.2s',
+                            '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
+                        }}
+                    >
+                        {item.icon}
+                    </Box>
+                ))}
             </Stack>
 
-            {/* CTA */}
+            {/* ── Swipe hint (shown only before first drag) ── */}
+            {!dragging && !exiting && (
+                <Typography
+                    sx={{
+                        fontSize: '0.7rem',
+                        color: '#334155',
+                        letterSpacing: 0.5,
+                        animation: 'pulse 2s ease-in-out infinite',
+                        '@keyframes pulse': {
+                            '0%,100%': { opacity: 0.5 },
+                            '50%': { opacity: 1 },
+                        },
+                    }}
+                >
+                    ← swipe to pass &nbsp;·&nbsp; swipe to like →
+                </Typography>
+            )}
+
+            {/* ── CTA ── */}
             <Button
                 variant="contained"
                 endIcon={<ArrowIcon />}
-                onClick={() => { playClick(person.accentColor); navigate(`/resume/${person.id}`); }}
+                onClick={(e) => { e.stopPropagation(); playClick(person.accentColor); navigate(`/resume/${person.id}`); }}
                 fullWidth
                 sx={{
                     background: `linear-gradient(135deg, ${person.accentColor}, ${person.secondaryColor})`,
@@ -347,6 +432,7 @@ function PersonCard({ person }) {
     );
 }
 
+// ─── Landing Page ─────────────────────────────────────────────────────────────
 function LandingPage() {
     return (
         <MainLayout>
@@ -447,12 +533,10 @@ function LandingPage() {
                     fontSize: '0.78rem',
                 }}
             >
-                © 2026 Raynold anak Kabai & Azhar Sulaiman | Intern Uglobal @ UNIMAS
+                © 2026 Raynold anak Kabai &amp; Azhar Sulaiman | Intern Uglobal @ UNIMAS
             </Box>
         </MainLayout>
     );
 }
-
-function StorageIcon(props) { return <DataIcon {...props} />; }
 
 export default LandingPage;
