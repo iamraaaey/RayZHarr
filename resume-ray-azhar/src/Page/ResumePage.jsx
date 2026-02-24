@@ -6,8 +6,13 @@ import {
     Chip,
     Divider,
     Button,
+<<<<<<< HEAD
     Grid,
+=======
+    IconButton,
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import {
     Email as EmailIcon,
     Phone as PhoneIcon,
@@ -17,16 +22,25 @@ import {
     Download as DownloadIcon,
     ArrowBack as ArrowBackIcon,
     Print as PrintIcon,
+<<<<<<< HEAD
     Work as WorkIcon,
     School as SchoolIcon,
     EmojiEvents as AchievementIcon,
     Build as SkillIcon,
     Person as PersonIcon,
     FormatQuote as QuoteIcon,
+=======
+    LightMode as LightModeIcon,
+    DarkMode as DarkModeIcon,
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
 } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { persons } from '../data/persons';
+<<<<<<< HEAD
 import MainLayout from '../Layout/MainLayout';
+=======
+import { useThemeMode } from '../Context/ThemeContext';
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
 
 // ─── Shared references for all persons ───────────────────────────────────────
 const REFERENCES = [
@@ -82,6 +96,14 @@ function SectionTitle({ icon, title, accentColor }) {
 function ResumePage() {
     const navigate = useNavigate();
     const { personId } = useParams();
+<<<<<<< HEAD
+=======
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
+    const { toggleMode } = useThemeMode();
+
+    // Resolve person from URL param, fall back to raynold
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
     const person = persons[personId] || persons.raynold;
     const { accentColor, secondaryColor } = person;
 
@@ -100,6 +122,7 @@ function ResumePage() {
                 sx={{
                     position: 'sticky', top: 0, zIndex: 100,
                     backdropFilter: 'blur(20px)',
+<<<<<<< HEAD
                     backgroundColor: 'rgba(10,10,15,0.9)',
                     borderBottom: '1px solid rgba(255,255,255,0.06)',
                     px: { xs: 2, md: 6 }, py: 1.2,
@@ -109,22 +132,85 @@ function ResumePage() {
             >
                 <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/')} size="small"
                     sx={{ color: '#94a3b8', textTransform: 'none', '&:hover': { color: accentColor } }}>
+=======
+                    backgroundColor: isDark ? 'rgba(10,10,15,0.88)' : 'rgba(255,255,255,0.88)',
+                    borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.08)',
+                    px: { xs: 2, md: 6 },
+                    py: 1.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 1,
+                }}
+            >
+                <Button
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => navigate('/')}
+                    size="small"
+                    sx={{
+                        color: 'text.secondary',
+                        textTransform: 'none',
+                        '&:hover': { color: accentColor },
+                    }}
+                >
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                     Back
                 </Button>
 
                 <Stack direction="row" spacing={0.5} flexWrap="wrap" justifyContent="center">
                     {NAV_LINKS.map((link) => (
+<<<<<<< HEAD
                         <Button key={link} size="small" onClick={() => scrollTo(link)}
                             sx={{ color: '#94a3b8', textTransform: 'none', fontSize: '0.8rem', borderRadius: 2, '&:hover': { color: accentColor, bgcolor: `${accentColor}15` } }}>
+=======
+                        <Button
+                            key={link}
+                            size="small"
+                            onClick={() => scrollTo(link)}
+                            sx={{
+                                color: 'text.secondary',
+                                textTransform: 'none',
+                                fontSize: '0.85rem',
+                                borderRadius: 2,
+                                '&:hover': { color: accentColor, bgcolor: `${accentColor}18` },
+                            }}
+                        >
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                             {link}
                         </Button>
                     ))}
                 </Stack>
 
+<<<<<<< HEAD
                 <Stack direction="row" spacing={1}>
                     <Button variant="outlined" startIcon={<PrintIcon />} size="small"
                         onClick={() => window.print()}
                         sx={{ borderColor: 'rgba(255,255,255,0.2)', color: '#94a3b8', textTransform: 'none', borderRadius: 2, fontSize: '0.8rem', '&:hover': { borderColor: accentColor, color: accentColor, bgcolor: `${accentColor}12` } }}>
+=======
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <IconButton onClick={toggleMode} size="small" sx={{ color: 'text.secondary' }}>
+                        {isDark ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
+                    </IconButton>
+                    <Button
+                        variant="outlined"
+                        startIcon={<PrintIcon />}
+                        size="small"
+                        onClick={() => window.print()}
+                        sx={{
+                            borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
+                            color: 'text.secondary',
+                            textTransform: 'none',
+                            borderRadius: 2,
+                            fontSize: '0.82rem',
+                            '&:hover': {
+                                borderColor: accentColor,
+                                color: accentColor,
+                                bgcolor: `${accentColor}12`,
+                            },
+                        }}
+                    >
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                         Print
                     </Button>
                     <Button variant="outlined" startIcon={<DownloadIcon />} size="small"
@@ -157,6 +243,7 @@ function ResumePage() {
                         <Box sx={{
                             position: 'absolute', inset: -3, borderRadius: '50%',
                             background: `linear-gradient(135deg, ${accentColor}, ${secondaryColor})`,
+<<<<<<< HEAD
                             filter: 'blur(6px)', opacity: 0.65,
                         }} />
                         <Avatar
@@ -238,10 +325,131 @@ function ResumePage() {
                             </Typography>
                             <Typography sx={{ color: '#475569', fontSize: '0.68rem', mt: 0.2 }}>{s.label}</Typography>
                         </Box>
+=======
+                            filter: 'blur(4px)',
+                            opacity: 0.7,
+                            animation: 'gradientShift 4s ease infinite',
+                            backgroundSize: '200% 200%',
+                        }}
+                    />
+                    <Avatar
+                        src={person.photo}
+                        alt={person.name}
+                        sx={{
+                            width: { xs: 120, md: 150 },
+                            height: { xs: 120, md: 150 },
+                            border: isDark ? '3px solid rgba(255,255,255,0.15)' : '3px solid rgba(0,0,0,0.1)',
+                            position: 'relative',
+                            zIndex: 1,
+                            fontSize: '3rem',
+                            bgcolor: accentColor,
+                        }}
+                    >
+                        {person.initials}
+                    </Avatar>
+                </Box>
+
+                {/* Name & Title */}
+                <Typography
+                    variant="h3"
+                    sx={{
+                        fontWeight: 800,
+                        background: isDark
+                            ? `linear-gradient(135deg, #f1f5f9, ${accentColor}, ${secondaryColor})`
+                            : `linear-gradient(135deg, #1e293b, ${accentColor}, ${secondaryColor})`,
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        fontSize: { xs: '1.8rem', sm: '2.4rem', md: '2.8rem' },
+                        mb: 1,
+                        lineHeight: 1.2,
+                    }}
+                >
+                    {person.name}
+                </Typography>
+
+                <Typography
+                    sx={{
+                        fontSize: { xs: '0.95rem', md: '1.15rem' },
+                        color: 'text.secondary',
+                        fontWeight: 400,
+                        mb: 1,
+                    }}
+                >
+                    {person.role}&nbsp;|&nbsp;
+                    <Box component="span" sx={{ color: accentColor, fontWeight: 600 }}>
+                        {person.title}
+                    </Box>
+                </Typography>
+
+                <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={0.5}
+                    sx={{ mb: 3 }}
+                >
+                    <LocationIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />
+                    <Typography sx={{ color: 'text.disabled', fontSize: '0.9rem' }}>
+                        {person.location}
+                    </Typography>
+                </Stack>
+
+                {/* Bio */}
+                <Typography
+                    sx={{
+                        maxWidth: 640,
+                        mx: 'auto',
+                        color: 'text.secondary',
+                        fontSize: '0.95rem',
+                        lineHeight: 1.8,
+                        mb: 3,
+                    }}
+                >
+                    {person.bio}
+                </Typography>
+
+                {/* Contact chips */}
+                <Stack direction="row" flexWrap="wrap" justifyContent="center" gap={1.5} sx={{ mb: 3 }}>
+                    {[
+                        { icon: <EmailIcon fontSize="small" />, label: person.email, href: `mailto:${person.email}` },
+                        { icon: <PhoneIcon fontSize="small" />, label: person.phone, href: `tel:${person.phone.replace(/\s/g, '')}` },
+                        { icon: <LinkedInIcon fontSize="small" />, label: person.linkedinLabel, href: person.linkedin },
+                        { icon: <GitHubIcon fontSize="small" />, label: person.githubLabel, href: person.github },
+                    ].map((c) => (
+                        <Chip
+                            key={c.label}
+                            icon={c.icon}
+                            label={c.label}
+                            component="a"
+                            href={c.href}
+                            target={c.href.startsWith('http') ? '_blank' : undefined}
+                            clickable
+                            size="small"
+                            sx={{
+                                bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                                color: 'text.primary',
+                                border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+                                '& .MuiChip-icon': { color: accentColor },
+                                '&:hover': {
+                                    bgcolor: `${accentColor}18`,
+                                    borderColor: `${accentColor}44`,
+                                    color: 'text.primary',
+                                },
+                                px: 0.5,
+                                fontSize: '0.8rem',
+                            }}
+                        />
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                     ))}
                 </Stack>
 
+<<<<<<< HEAD
                 <Divider sx={{ borderColor: 'rgba(255,255,255,0.06)', mb: 5 }} />
+=======
+            {/* ── Divider ── */}
+            <Divider sx={{ mx: { xs: 2, md: 8 }, borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)', mb: 6 }} />
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
 
                 {/* ═══════════════════════════════════════════════════════════
                     EXPERIENCE
@@ -505,10 +713,17 @@ function ResumePage() {
                         textAlign: 'center',
                     }}
                 >
+<<<<<<< HEAD
                     <Typography variant="h5" sx={{ fontWeight: 700, color: '#f1f5f9', mb: 1 }}>
                         Let's Work Together
                     </Typography>
                     <Typography sx={{ color: '#94a3b8', mb: 3, fontSize: '0.92rem', lineHeight: 1.8, maxWidth: 480, mx: 'auto' }}>
+=======
+                    <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', mb: 1.5 }}>
+                        Let's Work Together
+                    </Typography>
+                    <Typography sx={{ color: 'text.secondary', mb: 3, fontSize: '0.95rem', lineHeight: 1.8 }}>
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                         I'm always open to exciting opportunities, internships, and collaborations.
                         Feel free to reach out!
                     </Typography>
@@ -528,9 +743,24 @@ function ResumePage() {
             </Box>
 
             {/* ── Footer ── */}
+<<<<<<< HEAD
             <Box component="footer" className="no-print"
                 sx={{ textAlign: 'center', py: 3, borderTop: '1px solid rgba(255,255,255,0.06)', color: '#475569', fontSize: '0.8rem' }}>
                 © 2026 {person.name} · Built with React & MUI
+=======
+            <Box
+                component="footer"
+                className="no-print"
+                sx={{
+                    textAlign: 'center',
+                    py: 3,
+                    borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.08)',
+                    color: 'text.secondary',
+                    fontSize: '0.8rem',
+                }}
+            >
+                © 2026 {person.name} | Built with React & MUI
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
             </Box>
         </MainLayout>
     );

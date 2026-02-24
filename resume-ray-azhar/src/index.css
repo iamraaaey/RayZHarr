@@ -21,6 +21,15 @@
   --text-secondary: #94a3b8;
 }
 
+[data-theme='light'] {
+  --bg-dark: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-glass: rgba(0, 0, 0, 0.04);
+  --border: rgba(0, 0, 0, 0.08);
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+}
+
 html,
 body,
 #root {

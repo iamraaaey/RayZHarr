@@ -1,4 +1,5 @@
-import { Box, Typography, Button, Stack, Chip, Avatar } from '@mui/material';
+import { Box, Typography, Button, Stack, Chip, Avatar, IconButton } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import {
     ArrowForward as ArrowIcon,
     Code as CodeIcon,
@@ -8,11 +9,14 @@ import {
     Email as EmailIcon,
     GitHub as GitHubIcon,
     LinkedIn as LinkedInIcon,
+    LightMode as LightModeIcon,
+    DarkMode as DarkModeIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useRef } from 'react';
 import MainLayout from '../Layout/MainLayout';
 import { personList } from '../data/persons';
+import { useThemeMode } from '../Context/ThemeContext';
 
 // ─── Web Audio sound engine ───────────────────────────────────────────────────
 function useSound() {
@@ -96,7 +100,54 @@ function HighlightIcon({ label }) {
 
 function PersonCard({ person }) {
     const navigate = useNavigate();
+<<<<<<< HEAD
     const { playClick } = useSound();
+=======
+    const { playClick, playLike, playPass } = useSound();
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
+
+    const cardRef = useRef(null);
+    const startRef = useRef(null);
+
+    const [pos, setPos] = useState({ x: 0, y: 0 });
+    const [dragging, setDragging] = useState(false);
+    const [exiting, setExiting] = useState(null); // 'like' | 'pass' | null
+    const [gone, setGone] = useState(false);
+
+    // derived values
+    const rotation = pos.x / 20;
+    const likeOpacity = Math.min(Math.max(pos.x / 80, 0), 1);
+    const passOpacity = Math.min(Math.max(-pos.x / 80, 0), 1);
+
+    const flyOut = (dir) => {
+        setExiting(dir);
+        if (dir === 'like') playLike(); else playPass();
+        setTimeout(() => setGone(true), 420);
+    };
+
+    const handlePointerDown = (e) => {
+        if (exiting || gone) return;
+        setDragging(true);
+        startRef.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+        cardRef.current?.setPointerCapture(e.pointerId);
+    };
+
+    const handlePointerMove = (e) => {
+        if (!dragging) return;
+        setPos({ x: e.clientX - startRef.current.x, y: e.clientY - startRef.current.y });
+    };
+
+    const handlePointerUp = () => {
+        if (!dragging) return;
+        setDragging(false);
+        if (pos.x > 110) flyOut('like');
+        else if (pos.x < -110) flyOut('pass');
+        else setPos({ x: 0, y: 0 });
+    };
+
+    if (gone) return null;
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
 
     return (
         <Box
@@ -106,7 +157,9 @@ function PersonCard({ person }) {
                 maxWidth: { xs: '100%', md: 480 },
                 p: { xs: 3, sm: 4 },
                 borderRadius: 4,
-                background: `linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)`,
+                background: isDark
+                    ? `linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)`
+                    : `linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)`,
                 border: `1px solid ${person.accentColor}30`,
                 backdropFilter: 'blur(10px)',
                 display: 'flex',
@@ -153,7 +206,7 @@ function PersonCard({ person }) {
                     sx={{
                         width: { xs: 100, sm: 120 },
                         height: { xs: 100, sm: 120 },
-                        border: '3px solid rgba(255,255,255,0.12)',
+                        border: isDark ? '3px solid rgba(255,255,255,0.12)' : '3px solid rgba(0,0,0,0.1)',
                         position: 'relative',
                         zIndex: 1,
                         fontSize: '2.2rem',
@@ -171,7 +224,9 @@ function PersonCard({ person }) {
                     sx={{
                         fontWeight: 800,
                         fontSize: { xs: '1.3rem', sm: '1.5rem' },
-                        background: `linear-gradient(135deg, #f1f5f9, ${person.accentColor})`,
+                        background: isDark
+                            ? `linear-gradient(135deg, #f1f5f9, ${person.accentColor})`
+                            : `linear-gradient(135deg, #1e293b, ${person.accentColor})`,
                         backgroundClip: 'text',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
@@ -181,7 +236,7 @@ function PersonCard({ person }) {
                 >
                     {person.name}
                 </Typography>
-                <Typography sx={{ color: '#94a3b8', fontSize: '0.88rem', mb: 0.5 }}>
+                <Typography sx={{ color: 'text.secondary', fontSize: '0.88rem', mb: 0.5 }}>
                     {person.role}
                 </Typography>
                 <Typography
@@ -198,7 +253,11 @@ function PersonCard({ person }) {
             {/* Bio */}
             <Typography
                 sx={{
+<<<<<<< HEAD
                     color: '#64748b',
+=======
+                    color: 'text.disabled',
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                     fontSize: { xs: '0.82rem', sm: '0.85rem' },
                     lineHeight: 1.7,
                     maxWidth: 360,
@@ -221,7 +280,11 @@ function PersonCard({ person }) {
                         size="small"
                         sx={{
                             bgcolor: `${h.color}14`,
+<<<<<<< HEAD
                             color: '#cbd5e1',
+=======
+                            color: 'text.primary',
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                             border: `1px solid ${h.color}30`,
                             fontSize: '0.76rem',
                         }}
@@ -245,8 +308,13 @@ function PersonCard({ person }) {
                             px: 1.5,
                             py: 1,
                             borderRadius: 2,
+<<<<<<< HEAD
                             bgcolor: 'rgba(255,255,255,0.03)',
                             border: '1px solid rgba(255,255,255,0.06)',
+=======
+                            bgcolor: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
+                            border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)',
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                             minWidth: 60,
                         }}
                     >
@@ -263,7 +331,11 @@ function PersonCard({ person }) {
                         >
                             {s.value}
                         </Typography>
+<<<<<<< HEAD
                         <Typography sx={{ color: '#475569', fontSize: '0.68rem', mt: 0.2 }}>
+=======
+                        <Typography sx={{ color: 'text.secondary', fontSize: '0.68rem', mt: 0.2 }}>
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                             {s.label}
                         </Typography>
                     </Box>
@@ -272,9 +344,41 @@ function PersonCard({ person }) {
 
             {/* Quick contact */}
             <Stack direction="row" spacing={1}>
+<<<<<<< HEAD
                 <Box
                     component="a"
                     href={`mailto:${person.email}`}
+=======
+                {[
+                    { href: `mailto:${person.email}`, icon: <EmailIcon sx={{ fontSize: '1rem' }} /> },
+                    { href: person.github, icon: <GitHubIcon sx={{ fontSize: '1rem' }} />, external: true },
+                    { href: person.linkedin, icon: <LinkedInIcon sx={{ fontSize: '1rem' }} />, external: true },
+                ].map((item) => (
+                    <Box
+                        key={item.href}
+                        component="a"
+                        href={item.href}
+                        target={item.external ? '_blank' : undefined}
+                        onClick={(e) => e.stopPropagation()}
+                        sx={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: 34, height: 34, borderRadius: 2,
+                            color: 'text.secondary',
+                            bgcolor: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                            border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+                            transition: 'all 0.2s',
+                            '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
+                        }}
+                    >
+                        {item.icon}
+                    </Box>
+                ))}
+            </Stack>
+
+            {/* ── Swipe hint (shown only before first drag) ── */}
+            {!dragging && !exiting && (
+                <Typography
+>>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                     sx={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         width: 34, height: 34, borderRadius: 2,
@@ -348,8 +452,29 @@ function PersonCard({ person }) {
 }
 
 function LandingPage() {
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
+    const { toggleMode } = useThemeMode();
+
     return (
         <MainLayout>
+            {/* Theme toggle - top right */}
+            <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 200 }} className="no-print">
+                <IconButton
+                    onClick={toggleMode}
+                    sx={{
+                        color: 'text.secondary',
+                        bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+                        border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+                        '&:hover': {
+                            bgcolor: isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)',
+                        },
+                    }}
+                >
+                    {isDark ? <LightModeIcon /> : <DarkModeIcon />}
+                </IconButton>
+            </Box>
+
             {/* ── Hero ── */}
             <Box
                 sx={{
@@ -366,18 +491,18 @@ function LandingPage() {
                 }}
             >
                 {/* Background orbs */}
-                <Box sx={{ position: 'absolute', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)', top: '-20%', left: '-15%', pointerEvents: 'none' }} />
-                <Box sx={{ position: 'absolute', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%)', bottom: '-15%', right: '-10%', pointerEvents: 'none' }} />
-                <Box sx={{ position: 'absolute', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 70%)', top: '45%', left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none' }} />
+                <Box sx={{ position: 'absolute', width: 700, height: 700, borderRadius: '50%', background: `radial-gradient(circle, rgba(99,102,241,${isDark ? '0.1' : '0.06'}) 0%, transparent 70%)`, top: '-20%', left: '-15%', pointerEvents: 'none' }} />
+                <Box sx={{ position: 'absolute', width: 600, height: 600, borderRadius: '50%', background: `radial-gradient(circle, rgba(236,72,153,${isDark ? '0.08' : '0.05'}) 0%, transparent 70%)`, bottom: '-15%', right: '-10%', pointerEvents: 'none' }} />
+                <Box sx={{ position: 'absolute', width: 350, height: 350, borderRadius: '50%', background: `radial-gradient(circle, rgba(6,182,212,${isDark ? '0.06' : '0.04'}) 0%, transparent 70%)`, top: '45%', left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none' }} />
 
                 {/* Badge */}
                 <Chip
-                    label="👋 Welcome to our portfolio"
+                    label="Welcome to our portfolio"
                     size="small"
                     sx={{
-                        bgcolor: 'rgba(99,102,241,0.12)',
-                        color: '#a5b4fc',
-                        border: '1px solid rgba(99,102,241,0.25)',
+                        bgcolor: isDark ? 'rgba(99,102,241,0.12)' : 'rgba(99,102,241,0.08)',
+                        color: isDark ? '#a5b4fc' : '#6366f1',
+                        border: isDark ? '1px solid rgba(99,102,241,0.25)' : '1px solid rgba(99,102,241,0.2)',
                         mb: 3,
                         px: 1,
                         fontSize: '0.85rem',
@@ -394,7 +519,9 @@ function LandingPage() {
                         lineHeight: 1.1,
                         mb: 1.5,
                         animation: 'fadeInUp 0.6s ease-out',
-                        background: 'linear-gradient(135deg, #f1f5f9 30%, #818cf8 65%, #06b6d4 100%)',
+                        background: isDark
+                            ? 'linear-gradient(135deg, #f1f5f9 30%, #818cf8 65%, #06b6d4 100%)'
+                            : 'linear-gradient(135deg, #1e293b 30%, #6366f1 65%, #06b6d4 100%)',
                         backgroundClip: 'text',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
@@ -408,7 +535,7 @@ function LandingPage() {
                 <Typography
                     sx={{
                         fontSize: { xs: '0.95rem', md: '1.1rem' },
-                        color: '#64748b',
+                        color: 'text.disabled',
                         mb: { xs: 5, md: 6 },
                         animation: 'fadeInUp 0.7s ease-out',
                         maxWidth: 500,
@@ -442,8 +569,8 @@ function LandingPage() {
                 sx={{
                     textAlign: 'center',
                     py: 2.5,
-                    borderTop: '1px solid rgba(255,255,255,0.06)',
-                    color: '#475569',
+                    borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.08)',
+                    color: 'text.secondary',
                     fontSize: '0.78rem',
                 }}
             >

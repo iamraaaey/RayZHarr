@@ -37,7 +37,7 @@ function SectionHeader({ icon, title, color = '#6366f1' }) {
           variant="h6"
           sx={{
             fontWeight: 700,
-            color: '#f1f5f9',
+            color: 'text.primary',
             fontSize: { xs: '1.1rem', sm: '1.25rem' },
             textAlign: 'center',
           }}
