@@ -26,22 +26,6 @@ import { persons } from '../data/persons';
 import MainLayout from '../Layout/MainLayout';
 import { useThemeMode } from '../Context/ThemeContext';
 
-// ─── Shared references ────────────────────────────────────────────────────────
-const REFERENCES = [
-    {
-        name: 'Profesor Madya Dr. Chai Soo See',
-        role: 'Academic Advisor, UNIMAS',
-        email: 'sschai@unimas.my',
-        phone: '+6082-583637',
-    },
-    {
-        name: 'Ts. Nurfauza bt Jali',
-        role: 'Industry Coordinator, UNIMAS',
-        email: 'jnurfauza@unimas.my',
-        phone: '+6082-583814',
-    },
-];
-
 const NAV_LINKS = ['Experience', 'Education', 'Skills', 'Achievements', 'References', 'Contact'];
 
 // ─── Section Title ────────────────────────────────────────────────────────────
@@ -324,7 +308,7 @@ function ResumePage() {
                 <Box id="references" sx={{ mb: 6 }}>
                     <SectionTitle icon={<QuoteIcon fontSize="small" />} title="References" accentColor={accentColor} />
                     <Grid container spacing={3}>
-                        {REFERENCES.map((ref, i) => (
+                        {(person.references || []).map((ref, i) => (
                             <Grid item xs={12} sm={6} key={i}>
                                 <Box sx={{ p: 2.5, borderRadius: 3, bgcolor: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)', border: `1px solid ${accentColor}22`, borderLeft: `3px solid ${accentColor}`, height: '100%' }}>
                                     <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
