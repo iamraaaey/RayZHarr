@@ -142,6 +142,20 @@ export const persons = {
             'Critical Thinking', 'Time Management', 'Adaptability',
             'Leadership', 'Fast Learner', 'Attention to Detail',
         ],
+        references: [
+            {
+                name: 'Profesor Madya Dr. Chai Soo See',
+                role: 'Academic Advisor, UNIMAS',
+                email: 'sschai@unimas.my',
+                phone: '+6082-583637',
+            },
+            {
+                name: 'Ts. Nurfauza bt Jali',
+                role: 'Industry Coordinator, UNIMAS',
+                email: 'jnurfauza@unimas.my',
+                phone: '+6082-583814',
+            },
+        ],
     },
 
     // ─── ADD AZHAR PERSON HERE ──────────────────────────────────────────
@@ -282,6 +296,20 @@ export const persons = {
             'Analytical Thinking', 'Leadership', 'Documentation',
             'Problem Solving', 'Project Management',
             'Adaptability', 'Attention to Detail',
+        ],
+        references: [
+            {
+                name: 'Ts. Nurfauza bt Jali',
+                role: 'Industry Coordinator, UNIMAS',
+                email: 'jnurfauza@unimas.my',
+                phone: '+6082-583814',
+            },
+            {
+                name: 'Profesor Madya Dr. Chai Soo See',
+                role: 'Academic Advisor, UNIMAS',
+                email: 'sschai@unimas.my',
+                phone: '+6082-583637',
+            },
         ],
     },
 };
