@@ -21,7 +21,7 @@ import { useTheme } from '@mui/material/styles';
 import { sendMessage, resetChat } from '../services/geminiChat';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const GREETING = "Hi! I'm your **Portfolio Assistant** ✨\n\nAsk me anything about Raynold or Azhar — their skills, projects, experience, or achievements!";
+const GREETING = "Hi! I'm your **Portfolio Assistant** ✨\n\nAsk me anything about Raynold or Azhar their skills, projects, experience, or achievements!";
 
 const QUICK_PROMPTS = [
     "What are Raynold's top skills?",

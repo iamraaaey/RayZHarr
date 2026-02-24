@@ -334,7 +334,7 @@ function LandingPage() {
                     borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.08)',
                     color: 'text.secondary', fontSize: '0.78rem',
                 }}>
-                © 2026 Raynold anak Kabai & Azhar Sulaiman | Intern Uglobal @ UNIMAS
+                © 2026 Raynold anak Kabai & Azhar Sharif | Intern Uglobal @ UNIMAS
             </Box>
             <ChatBot />
         </MainLayout>

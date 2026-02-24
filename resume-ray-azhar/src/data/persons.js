@@ -64,6 +64,19 @@ export const persons = {
                 gpa: '3.89 / 4.0',
             },
             {
+                degree: 'Diploma in Information Technology (Digital Technology)',
+                institution: 'Politeknik Kuching Sarawak',
+                period: 'June 2020 – June 2023',
+                location: 'Kuching, Sarawak',
+                color: '#f59e0b',
+                highlights: [
+                    'Programme Code: MQA/FA3241',
+                    'Graduated with CGPA: 3.89 / 4.0',
+                ],
+                gpa: '3.89 / 4.0',
+                code: 'MQA/FA3241',
+            },
+            {
                 degree: 'Matriculation (Science Stream)',
                 institution: 'Kolej Matrikulasi',
                 period: '2021 – 2022',
