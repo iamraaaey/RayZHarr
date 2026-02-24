@@ -17,6 +17,7 @@ import { useCallback, useRef } from 'react';
 import MainLayout from '../Layout/MainLayout';
 import { personList } from '../data/persons';
 import { useThemeMode } from '../Context/ThemeContext';
+import ChatBot from '../Components/ChatBot';
 
 // ─── Web Audio sound engine ───────────────────────────────────────────────────
 function useSound() {
@@ -335,6 +336,7 @@ function LandingPage() {
                 }}>
                 © 2026 Raynold anak Kabai & Azhar Sulaiman | Intern Uglobal @ UNIMAS
             </Box>
+            <ChatBot />
         </MainLayout>
     );
 }
