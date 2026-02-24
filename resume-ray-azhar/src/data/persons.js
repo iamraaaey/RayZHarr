@@ -145,7 +145,145 @@ export const persons = {
     },
 
     // ─── ADD AZHAR PERSON HERE ──────────────────────────────────────────
-    
+    azhar: {
+        id: 'azhar',
+        name: 'Azhar Sharif Bin Abu Seman',
+        role: 'Software Engineering Intern',
+        title: 'ML Engineer',
+        university: 'UNIMAS',
+        location: 'Kuching, Sarawak, Malaysia',
+        bio: 'A motivated Computer Science student specialising in back-end development, cloud computing, and data engineering. Passionate about building scalable APIs, managing cloud infrastructure, and designing efficient data pipelines. Eager to apply my skills in real-world projects and contribute to innovative solutions.',
+        photo: '/azhar.jpg',
+        initials: 'AS',
+        accentColor: '#ec4899',
+        secondaryColor: '#8b5cf6',
+        email: 'azhar.aynold@gmail.com',
+        phone: '+601133150414',
+        linkedin: 'https://linkedin.com/in/azharsharif',
+        github: 'https://github.com/azharsharif',
+        linkedinLabel: 'linkedin/azharsharif',
+        githubLabel: 'github/azharshf',
+        cvFile: '/azhar_cv.pdf',
+        stats: [
+            { value: '2+', label: 'Years Coding' },
+            { value: '15+', label: 'Projects Built' },
+            { value: '8+', label: 'Languages' },
+            { value: '3.7', label: 'GPA' },
+        ],
+        highlights: [
+            { label: 'ML Developer', color: '#ec4899' },
+            { label: 'Cloud & DevOps', color: '#8b5cf6' },
+            { label: 'Data Engineering', color: '#10b981' },
+            { label: 'System Design', color: '#f59e0b' },
+        ],
+        experiences: [
+            {
+                role: 'Software Engineering Intern',
+                company: 'UGLOBAL SOLUTIONS SDN. BHD.',
+                period: 'Feb 2026 – Present',
+                location: 'Kota Samarahan, Sarawak',
+                color: '#ec4899',
+                highlights: [
+                    'Designing and building ML models with Python and TensorFlow to solve real-world problems',
+                    'Managing cloud infrastructure on AWS (EC2, S3, Lambda)',
+                    'Implementing CI/CD pipelines using GitHub Actions and Docker',
+                    'Working closely with design team to deliver end-to-end features',
+                ],
+                tags: ['Node.js', 'AWS', 'Docker', 'TensorFlow', 'GitHub Actions'],
+            },
+        ],
+        education: [
+            {
+                degree: 'Bachelor of Science in Computer Science',
+                institution: 'Universiti Malaysia Sarawak (UNIMAS)',
+                period: '2022 – 2026',
+                location: 'Kota Samarahan, Sarawak',
+                color: '#8b5cf6',
+                highlights: [
+                    'Specialisation in Distributed Systems & Cloud Computing',
+                    'Relevant courses: Operating Systems, Networks, Database Systems, Cloud Architecture',
+                    'Final Year Project: Real-time collaborative whiteboard platform',
+                ],
+                gpa: '3.5 / 4.0',
+            },
+            {
+                degree: 'Matriculation (Science Stream)',
+                institution: 'Kolej Matrikulasi Selangor',
+                period: '2021 – 2022',
+                location: 'Malaysia',
+                color: '#10b981',
+                highlights: [
+                    'Physics, Chemistry, Mathematics, Biology',
+                    'CGPA: 3.9 / 4.0',
+                ],
+            },
+        ],
+        achievements: [
+            {
+                title: "Dean's List Award",
+                desc: 'Awarded for academic excellence during Semester 2 and Semester 4',
+                color: '#f59e0b',
+            },
+            {
+                title: 'Best Ideas – ClaudeHack Sarawak',
+                desc: 'Awarded for outstanding back-end architecture in a 48-hour hackathon',
+                color: '#ec4899',
+            },
+            {
+                title: 'Cloud Expert Certified',
+                desc: 'AWS Certified Cloud Practitioner — December 2024',
+                color: '#8b5cf6',
+            },
+        ],
+        skillCategories: [
+            {
+                label: 'Programming Languages',
+                color: '#ec4899',
+                skills: [
+                    { name: 'JavaScript', level: 88 },
+                    { name: 'Python', level: 82 },
+                    { name: 'C++', level: 65 },
+                    { name: 'Golang', level: 85 },
+                    { name: 'Swift', level: 70 },
+                ],
+            },
+            {
+                label: 'Back-End & Cloud',
+                color: '#8b5cf6',
+                skills: [
+                    { name: 'Node.js / Express', level: 88 },
+                    { name: 'AWS', level: 75 },
+                    { name: 'Docker', level: 72 },
+                    { name: 'PostgreSQL', level: 80 },
+                    { name: 'MongoDB', level: 70 },
+                ],
+            },
+            {
+                label: 'Tools & DevOps',
+                color: '#10b981',
+                skills: [
+                    { name: 'Git/GitHub', level: 90 },
+                    { name: 'Linux/CLI', level: 80 },
+                    { name: 'GitHub Actions', level: 70 },
+                    { name: 'Terraform', level: 85 },
+                ],
+            },
+            {
+                label: 'Data & AI',
+                color: '#f59e0b',
+                skills: [
+                    { name: 'Data Pipeline Design', level: 70 },
+                    { name: 'Machine Learning', level: 60 },
+                    { name: 'Tableau', level: 65 },
+                ],
+            },
+        ],
+        softSkills: [
+            'Analytical Thinking', 'Leadership', 'Documentation',
+            'Problem Solving', 'Project Management',
+            'Adaptability', 'Attention to Detail',
+        ],
+    },
 };
 
 // Ordered list for landing page display
