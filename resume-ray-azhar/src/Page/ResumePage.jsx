@@ -17,12 +17,11 @@ import {
     ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
-import ExperienceSection from '../Components/ExperienceSection';
 import SkillsSection from '../Components/SkillsSection';
 import MainLayout from '../Layout/MainLayout';
 import { persons } from '../data/persons';
 
-const NAV_LINKS = ['Experience', 'Education', 'Skills', 'Contact'];
+const NAV_LINKS = ['Education', 'Skills', 'Contact'];
 
 function ResumePage() {
     const navigate = useNavigate();
@@ -274,11 +273,7 @@ function ResumePage() {
                     pb: 10,
                 }}
             >
-                <Box id="experience" sx={{ mb: 8 }}>
-                    <ExperienceSection person={person} />
-                </Box>
-
-                <Box id="skills" sx={{ mb: 8 }}>
+<Box id="skills" sx={{ mb: 8 }}>
                     <SkillsSection person={person} />
                 </Box>
 
