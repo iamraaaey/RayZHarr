@@ -347,7 +347,7 @@ function ResumePage() {
                     fontSize: '0.8rem',
                 }}
             >
-                © 2026 {person.name} — Built with React & MUI
+                © 2026 {person.name} | Built with React & MUI
             </Box>
         </MainLayout>
     );

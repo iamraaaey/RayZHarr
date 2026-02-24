@@ -347,7 +347,7 @@ function LandingPage() {
                         maxWidth: 500,
                     }}
                 >
-                    Meet the team — select a profile to explore a full interactive resume.
+                    Meet Raynold and Azhar, two passionate software engineering interns at UNIMAS. Explore their skills, projects, and aspirations in the world of tech.
                 </Typography>
 
                 {/* Person Cards */}
@@ -380,7 +380,7 @@ function LandingPage() {
                     fontSize: '0.78rem',
                 }}
             >
-                © 2026 Raynold anak Kabai & Harry Sulaiman — CS Undergraduates @ UNIMAS
+                © 2026 Raynold anak Kabai & Azhar Sulaiman — Intern Uglobal @ UNIMAS
             </Box>
         </MainLayout>
     );
