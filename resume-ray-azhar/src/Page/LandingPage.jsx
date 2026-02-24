@@ -26,11 +26,9 @@ function useSound() {
         if (!ctxRef.current) {
             ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
         }
-
         if (ctxRef.current.state === 'suspended') ctxRef.current.resume();
         return ctxRef.current;
     }, []);
-
 
     const playClick = useCallback((accentColor = '#6366f1') => {
         const ctx = getCtx();
@@ -100,54 +98,9 @@ function HighlightIcon({ label }) {
 
 function PersonCard({ person }) {
     const navigate = useNavigate();
-<<<<<<< HEAD
     const { playClick } = useSound();
-=======
-    const { playClick, playLike, playPass } = useSound();
     const theme = useTheme();
     const isDark = theme.palette.mode === 'dark';
-
-    const cardRef = useRef(null);
-    const startRef = useRef(null);
-
-    const [pos, setPos] = useState({ x: 0, y: 0 });
-    const [dragging, setDragging] = useState(false);
-    const [exiting, setExiting] = useState(null); // 'like' | 'pass' | null
-    const [gone, setGone] = useState(false);
-
-    // derived values
-    const rotation = pos.x / 20;
-    const likeOpacity = Math.min(Math.max(pos.x / 80, 0), 1);
-    const passOpacity = Math.min(Math.max(-pos.x / 80, 0), 1);
-
-    const flyOut = (dir) => {
-        setExiting(dir);
-        if (dir === 'like') playLike(); else playPass();
-        setTimeout(() => setGone(true), 420);
-    };
-
-    const handlePointerDown = (e) => {
-        if (exiting || gone) return;
-        setDragging(true);
-        startRef.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
-        cardRef.current?.setPointerCapture(e.pointerId);
-    };
-
-    const handlePointerMove = (e) => {
-        if (!dragging) return;
-        setPos({ x: e.clientX - startRef.current.x, y: e.clientY - startRef.current.y });
-    };
-
-    const handlePointerUp = () => {
-        if (!dragging) return;
-        setDragging(false);
-        if (pos.x > 110) flyOut('like');
-        else if (pos.x < -110) flyOut('pass');
-        else setPos({ x: 0, y: 0 });
-    };
-
-    if (gone) return null;
->>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
 
     return (
         <Box
@@ -253,11 +206,7 @@ function PersonCard({ person }) {
             {/* Bio */}
             <Typography
                 sx={{
-<<<<<<< HEAD
-                    color: '#64748b',
-=======
                     color: 'text.disabled',
->>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                     fontSize: { xs: '0.82rem', sm: '0.85rem' },
                     lineHeight: 1.7,
                     maxWidth: 360,
@@ -280,11 +229,7 @@ function PersonCard({ person }) {
                         size="small"
                         sx={{
                             bgcolor: `${h.color}14`,
-<<<<<<< HEAD
-                            color: '#cbd5e1',
-=======
                             color: 'text.primary',
->>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                             border: `1px solid ${h.color}30`,
                             fontSize: '0.76rem',
                         }}
@@ -308,13 +253,8 @@ function PersonCard({ person }) {
                             px: 1.5,
                             py: 1,
                             borderRadius: 2,
-<<<<<<< HEAD
-                            bgcolor: 'rgba(255,255,255,0.03)',
-                            border: '1px solid rgba(255,255,255,0.06)',
-=======
                             bgcolor: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
                             border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)',
->>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                             minWidth: 60,
                         }}
                     >
@@ -331,11 +271,7 @@ function PersonCard({ person }) {
                         >
                             {s.value}
                         </Typography>
-<<<<<<< HEAD
-                        <Typography sx={{ color: '#475569', fontSize: '0.68rem', mt: 0.2 }}>
-=======
                         <Typography sx={{ color: 'text.secondary', fontSize: '0.68rem', mt: 0.2 }}>
->>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
                             {s.label}
                         </Typography>
                     </Box>
@@ -344,11 +280,6 @@ function PersonCard({ person }) {
 
             {/* Quick contact */}
             <Stack direction="row" spacing={1}>
-<<<<<<< HEAD
-                <Box
-                    component="a"
-                    href={`mailto:${person.email}`}
-=======
                 {[
                     { href: `mailto:${person.email}`, icon: <EmailIcon sx={{ fontSize: '1rem' }} /> },
                     { href: person.github, icon: <GitHubIcon sx={{ fontSize: '1rem' }} />, external: true },
@@ -359,7 +290,6 @@ function PersonCard({ person }) {
                         component="a"
                         href={item.href}
                         target={item.external ? '_blank' : undefined}
-                        onClick={(e) => e.stopPropagation()}
                         sx={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             width: 34, height: 34, borderRadius: 2,
@@ -373,53 +303,6 @@ function PersonCard({ person }) {
                         {item.icon}
                     </Box>
                 ))}
-            </Stack>
-
-            {/* ── Swipe hint (shown only before first drag) ── */}
-            {!dragging && !exiting && (
-                <Typography
->>>>>>> daeb516d24bbe75a745c7c1e26aae2cdbfd4ca60
-                    sx={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: 34, height: 34, borderRadius: 2,
-                        color: '#94a3b8', bgcolor: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        transition: 'all 0.2s',
-                        '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
-                    }}
-                >
-                    <EmailIcon sx={{ fontSize: '1rem' }} />
-                </Box>
-                <Box
-                    component="a"
-                    href={person.github}
-                    target="_blank"
-                    sx={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: 34, height: 34, borderRadius: 2,
-                        color: '#94a3b8', bgcolor: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        transition: 'all 0.2s',
-                        '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
-                    }}
-                >
-                    <GitHubIcon sx={{ fontSize: '1rem' }} />
-                </Box>
-                <Box
-                    component="a"
-                    href={person.linkedin}
-                    target="_blank"
-                    sx={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: 34, height: 34, borderRadius: 2,
-                        color: '#94a3b8', bgcolor: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        transition: 'all 0.2s',
-                        '&:hover': { color: person.accentColor, borderColor: `${person.accentColor}50`, bgcolor: `${person.accentColor}12` },
-                    }}
-                >
-                    <LinkedInIcon sx={{ fontSize: '1rem' }} />
-                </Box>
             </Stack>
 
             {/* CTA */}
@@ -579,7 +462,5 @@ function LandingPage() {
         </MainLayout>
     );
 }
-
-function StorageIcon(props) { return <DataIcon {...props} />; }
 
 export default LandingPage;
