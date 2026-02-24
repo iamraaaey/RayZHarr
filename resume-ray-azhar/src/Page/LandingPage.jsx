@@ -10,8 +10,74 @@ import {
     LinkedIn as LinkedInIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useCallback, useRef } from 'react';
 import MainLayout from '../Layout/MainLayout';
 import { personList } from '../data/persons';
+
+// ─── Web Audio sound engine ───────────────────────────────────────────────────
+function useSound() {
+    const ctxRef = useRef(null);
+
+    const getCtx = useCallback(() => {
+        if (!ctxRef.current) {
+            ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        if (ctxRef.current.state === 'suspended') ctxRef.current.resume();
+        return ctxRef.current;
+    }, []);
+
+  
+    const playClick = useCallback((accentColor = '#6366f1') => {
+        const ctx = getCtx();
+        const now = ctx.currentTime;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(260, now + 0.12);
+
+        filter.type = 'lowpass';
+        filter.frequency.value = 3000;
+
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.2);
+    }, [getCtx]);
+
+    /** Soft "tick" for hover */
+    const playHover = useCallback(() => {
+        const ctx = getCtx();
+        const now = ctx.currentTime;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(900, now);
+        osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.08);
+    }, [getCtx]);
+
+    return { playClick, playHover };
+}
 
 // fallback icon resolver
 function HighlightIcon({ label }) {
@@ -30,6 +96,7 @@ function HighlightIcon({ label }) {
 
 function PersonCard({ person }) {
     const navigate = useNavigate();
+    const { playClick } = useSound();
 
     return (
         <Box
@@ -255,7 +322,7 @@ function PersonCard({ person }) {
             <Button
                 variant="contained"
                 endIcon={<ArrowIcon />}
-                onClick={() => navigate(`/resume/${person.id}`)}
+                onClick={() => { playClick(person.accentColor); navigate(`/resume/${person.id}`); }}
                 fullWidth
                 sx={{
                     background: `linear-gradient(135deg, ${person.accentColor}, ${person.secondaryColor})`,

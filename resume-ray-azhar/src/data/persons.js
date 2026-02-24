@@ -4,7 +4,7 @@
 export const persons = {
     raynold: {
         id: 'raynold',
-        name: 'Raynold anak Kabai',
+        name: 'Raynold Anak Kabai',
         role: 'Software Engineering Intern',
         title: 'Full-Stack Developer',
         university: 'UNIMAS',
