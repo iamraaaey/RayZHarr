@@ -321,7 +321,7 @@ function ChatBot() {
                                 <Stack direction="row" alignItems="center" spacing={0.6}>
                                     <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: '#4ade80', boxShadow: '0 0 6px #4ade80', animation: 'pulse 2s infinite', '@keyframes pulse': { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.5 } } }} />
                                     <Typography sx={{ fontSize: '0.73rem', color: 'rgba(255,255,255,0.75)' }}>
-                                        Online · Powered by Gemini AI
+                                        Online · Powered by GroQ 
                                     </Typography>
                                 </Stack>
                             </Box>
