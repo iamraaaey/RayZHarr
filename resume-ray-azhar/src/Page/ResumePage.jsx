@@ -25,7 +25,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { persons } from '../data/persons';
 import MainLayout from '../Layout/MainLayout';
 import { useThemeMode } from '../Context/ThemeContext';
-import ChatBot from '../Components/ChatBot';
 
 const NAV_LINKS = ['Experience', 'Education', 'Skills', 'Achievements', 'References', 'Contact'];
 
@@ -374,7 +373,6 @@ function ResumePage() {
                 sx={{ textAlign: 'center', py: 3, borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.08)', color: 'text.secondary', fontSize: '0.8rem' }}>
                 © 2026 {person.name} · Built with React & MUI
             </Box>
-            <ChatBot />
         </MainLayout>
     );
 }
